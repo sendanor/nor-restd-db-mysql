@@ -40,7 +40,9 @@ module.exports = function(opts) {
 			':mysql_db_name': {
 				'tables': {
 					':mysql_db_table': {
-						':mysql_db_id': {}
+						'rows': {
+							':mysql_db_id': {}
+						}
 					}
 				}
 			}
@@ -141,8 +143,21 @@ module.exports = function(opts) {
 		return "Not implemented yet.";
 	};
 
-	/** Get database table information */
+	/** Get database table rows */
 	routes.databases[':mysql_db_name'].tables[':mysql_db_table'].GET = function(req, res) {
+		var name = ''+req.params.mysql_db_name;
+		var table = ''+req.params.mysql_db_table;
+		
+		return {'name': table, 'rows': {'$ref':get_ref(req)+'/rows'}};
+	};
+
+	/** Delete database table (DROP TABLE) */
+	routes.databases[':mysql_db_name'].tables[':mysql_db_table'].DELETE = function(req, res) {
+		return "Not implemented yet.";
+	};
+
+	/** Get database table rows */
+	routes.databases[':mysql_db_name'].tables[':mysql_db_table'].rows.GET = function(req, res) {
 		var name = ''+req.params.mysql_db_name;
 		var table = ''+req.params.mysql_db_table;
 
@@ -157,18 +172,18 @@ module.exports = function(opts) {
 		return do_query_action('SELECT * FROM '+escape_db(name)+'.'+escape_table(table)).then(format_results);
 	};
 
-	/** Delete database table (DROP TABLE) */
-	routes.databases[':mysql_db_name'].tables[':mysql_db_table'].DELETE = function(req, res) {
+	/** Delete database table (DELETE FROM) */
+	routes.databases[':mysql_db_name'].tables[':mysql_db_table'].rows.DELETE = function(req, res) {
 		return "Not implemented yet.";
 	};
 
 	/** Insert new row in the table (INSERT) */
-	routes.databases[':mysql_db_name'].tables[':mysql_db_table'].POST = function(req, res) {
+	routes.databases[':mysql_db_name'].tables[':mysql_db_table'].rows.POST = function(req, res) {
 		return "Not implemented yet.";
 	};
 
 	/** Get single row by primary key (SELECT WHERE id=:id) */
-	routes.databases[':mysql_db_name'].tables[':mysql_db_table'][':mysql_db_id'].GET = function(req, res) {
+	routes.databases[':mysql_db_name'].tables[':mysql_db_table'].rows[':mysql_db_id'].GET = function(req, res) {
 		var name = ''+req.params.mysql_db_name;
 		var table = ''+req.params.mysql_db_table;
 		var id = ''+req.params.mysql_db_id;
@@ -183,12 +198,12 @@ module.exports = function(opts) {
 	};
 
 	/** Delete single row by primary key (DELETE WHERE id=:id) */
-	routes.databases[':mysql_db_name'].tables[':mysql_db_table'][':mysql_db_id'].DELETE = function(req, res) {
+	routes.databases[':mysql_db_name'].tables[':mysql_db_table'].rows[':mysql_db_id'].DELETE = function(req, res) {
 		return "Not implemented yet.";
 	};
 
 	/** Update single row by primary key (UPDATE WHERE id=:id) */
-	routes.databases[':mysql_db_name'].tables[':mysql_db_table'][':mysql_db_id'].POST = function(req, res) {
+	routes.databases[':mysql_db_name'].tables[':mysql_db_table'].rows[':mysql_db_id'].POST = function(req, res) {
 		return "Not implemented yet.";
 	};
 
