@@ -36,6 +36,7 @@ module.exports = function(opts) {
 			'mysql_db_table': /^[a-zA-Z0-9\.\_\-]+$/,
 			'mysql_db_id': /^[0-9]+$/,
 		},
+		'status': {},
 		'databases': {
 			':mysql_db_name': {
 				'tables': {
@@ -52,7 +53,10 @@ module.exports = function(opts) {
 
 	/** Get all collections (databases, etc) */
 	routes.GET = function(req, res) {
-		var ret = {'databases':{'$ref':get_ref(req) + '/databases'}};
+		var ret = {
+			'databases': { '$ref':get_ref(req) + '/databases' },
+			'status': { '$ref':get_ref(req) + '/status' }
+		};
 		['host', 'username'].forEach(function(key) {
 			if(opts[key] !== undefined) {
 				ret[key] = opts[key];
@@ -89,6 +93,18 @@ module.exports = function(opts) {
 
 		return POOL.getConnection().then(save_db).then(create_query_action(''+q, params)).then(save_ret).$release().then(get_ret);
 	}
+
+	/** Get all collections (SHOW STATUS) */
+	routes.status.GET = function(req, res) {
+		function format_results(ret) {
+			var result = {};
+			ret.shift().forEach(function(row) {
+				result[row.Variable_name] = row.Value;
+			});
+			return result;
+		}
+		return do_query_action('SHOW STATUS').then(format_results);
+	};
 
 	/** Get all collections (SHOW DATABASES) */
 	routes.databases.GET = function(req, res) {
