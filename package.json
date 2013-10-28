@@ -1,0 +1,30 @@
+{
+  "name": "nor-restd-db-mysql",
+  "version": "0.0.1",
+  "description": "MySQL Database Module for Sendanor REST Daemon",
+  "main": "src/index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "mocha -R spec tests/test-*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Sendanor/nor-restd-modules.git"
+  },
+  "dependencies": {
+    "q": "*"
+  },
+  "devDependencies": {
+    "lint": "*",
+    "mocha": "*",
+    "nor-is": "*",
+    "nor-db": "*"
+  },
+  "author": "Jaakko-Heikki Heusala <jheusala@iki.fi>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Sendanor/nor-restd-modules/issues"
+  }
+}
