@@ -1,6 +1,6 @@
 {
   "name": "nor-restd-db-mysql",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "MySQL Database Module for nor-restd",
   "main": "src/index.js",
   "directories": {

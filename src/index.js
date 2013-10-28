@@ -40,6 +40,7 @@ module.exports = function(opts) {
 			':mysql_db_name': {
 				'tables': {
 					':mysql_db_table': {
+						'desc': {},
 						'rows': {
 							':mysql_db_id': {}
 						}
@@ -148,12 +149,28 @@ module.exports = function(opts) {
 		var name = ''+req.params.mysql_db_name;
 		var table = ''+req.params.mysql_db_table;
 		
-		return {'name': table, 'rows': {'$ref':get_ref(req)+'/rows'}};
+		return {'name': table, 'rows': {'$ref':get_ref(req)+'/rows'}, 'desc': {'$ref':get_ref(req)+'/desc'}};
 	};
 
 	/** Delete database table (DROP TABLE) */
 	routes.databases[':mysql_db_name'].tables[':mysql_db_table'].DELETE = function(req, res) {
 		return "Not implemented yet.";
+	};
+
+	/** Get database table information (DESCRIBE) */
+	routes.databases[':mysql_db_name'].tables[':mysql_db_table'].desc.GET = function(req, res) {
+		var name = ''+req.params.mysql_db_name;
+		var table = ''+req.params.mysql_db_table;
+
+		function format_results(ret) {
+			var obj = {};
+			ret.shift().forEach(function(o) {
+				obj[o.Field] = o;
+			});
+			return obj;
+		}
+
+		return do_query_action('DESCRIBE '+escape_db(name)+'.'+escape_table(table)).then(format_results);
 	};
 
 	/** Get database table rows */
